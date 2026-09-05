@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd03ed8da2ae66f42be365f30036f75b, type: 3}
+  m_Name: BD_Wood
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingData
+  buildingId: wood
+  buildingName: 'Madeireira '
+  description: Produz madeira para o reino..
+  buildingType: 1
+  prefab: {fileID: 1001984825461517184, guid: 19f3c8e02faa998409fe9d42e86b308f, type: 3}
+  icon: {fileID: 0}
+  width: 2
+  height: 2
+  constructionTime: 5
+  woodCost: 100
+  stoneCost: 50
+  foodCost: 0
+  goldCost: 0
+  requiredLevel: 1
+  maxLevel: 10
+  populationByLevel: 0a0000000f00000014000000190000001e00000023000000280000002d0000003200000037000000
+  woodProductionByLevel: 08000000100000001800000020000000280000003000000038000000400000004800000050000000
+  stoneProductionByLevel: 08000000100000001800000020000000280000003000000038000000400000004800000050000000
+  upgradeWoodCostByLevel: 140000002800000050000000a00000002c010000f401000020030000b004000008070000
+  upgradeStoneCostByLevel: 0a00000014000000280000005000000096000000fa000000900100005802000084030000
+  upgradeFoodCostByLevel: 000000000000000000000000000000000000000000000000000000000000000000000000
+  upgradeGoldCostByLevel: 0a00000014000000280000005000000096000000fa000000900100005802000084030000
+  upgradeTimeByLevel:
+  - 10
+  - 20
+  - 40
+  - 60
+  - 120
+  - 180
+  - 300
+  - 420
+  - 600
