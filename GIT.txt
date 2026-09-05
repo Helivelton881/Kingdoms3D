@@ -1,0 +1,2 @@
+git config --global user.name Helivelton
+git config --global user.email Donisetehelivelton@icloud.com
