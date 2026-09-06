@@ -1828,6 +1828,7 @@ GameObject:
   - component: {fileID: 725091519}
   - component: {fileID: 725091518}
   - component: {fileID: 725091520}
+  - component: {fileID: 725091521}
   m_Layer: 0
   m_Name: KingdomSystems
   m_TagString: Untagged
@@ -1898,6 +1899,26 @@ MonoBehaviour:
   validColor: {r: 0.15, g: 1, b: 0.25, a: 0.65}
   invalidColor: {r: 1, g: 0.1, b: 0.1, a: 0.65}
   previewHeight: 0
+--- !u!114 &725091521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 725091517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5512bd17b9574d24983f5b503d2c0793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceManager
+  startingWood: 1000
+  startingStone: 1000
+  startingFood: 1000
+  startingGold: 500
+  wood: 0
+  stone: 0
+  food: 0
+  gold: 0
 --- !u!1 &736971607
 GameObject:
   m_ObjectHideFlags: 0
