@@ -11,6 +11,7 @@ using UnityEngine;
 /// - Cada tipo de construção pode ter no máximo 10 unidades.
 /// - Upgrades também utilizam o único construtor.
 /// - Exibe um contador de tempo sobre a construção/trabalho atual.
+/// - Construções e upgrades consomem recursos.
 /// </summary>
 public class ConstructionManager : MonoBehaviour
 {
@@ -205,6 +206,118 @@ public class ConstructionManager : MonoBehaviour
 
 
     // =========================================================
+    // VERIFICAR RECURSOS DA CONSTRUÇÃO
+    // =========================================================
+
+    private bool CanAffordConstruction(
+        BuildingData buildingData
+    )
+    {
+        if (buildingData == null)
+            return false;
+
+
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogError(
+                "ConstructionManager: ResourceManager não encontrado."
+            );
+
+            return false;
+        }
+
+
+        bool canAfford =
+            ResourceManager.Instance.CanAfford(
+                buildingData.WoodCost,
+                buildingData.StoneCost,
+                buildingData.FoodCost,
+                buildingData.GoldCost
+            );
+
+
+        if (!canAfford)
+        {
+            Debug.Log(
+                "Recursos insuficientes para construir: " +
+                buildingData.BuildingName +
+                " | Necessário: " +
+                "Madeira " + buildingData.WoodCost +
+                " | Pedra " + buildingData.StoneCost +
+                " | Comida " + buildingData.FoodCost +
+                " | Ouro " + buildingData.GoldCost +
+                " | Atual: " +
+                "Madeira " + ResourceManager.Instance.Wood +
+                " | Pedra " + ResourceManager.Instance.Stone +
+                " | Comida " + ResourceManager.Instance.Food +
+                " | Ouro " + ResourceManager.Instance.Gold
+            );
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // =========================================================
+    // PAGAR CONSTRUÇÃO
+    // =========================================================
+
+    private bool PayConstructionCost(
+        BuildingData buildingData
+    )
+    {
+        if (buildingData == null)
+            return false;
+
+
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogError(
+                "ConstructionManager: ResourceManager não encontrado."
+            );
+
+            return false;
+        }
+
+
+        bool paid =
+            ResourceManager.Instance.TrySpend(
+                buildingData.WoodCost,
+                buildingData.StoneCost,
+                buildingData.FoodCost,
+                buildingData.GoldCost
+            );
+
+
+        if (!paid)
+        {
+            Debug.LogWarning(
+                "ConstructionManager: não foi possível pagar " +
+                "os recursos da construção."
+            );
+
+            return false;
+        }
+
+
+        Debug.Log(
+            "Recursos consumidos para construir: " +
+            buildingData.BuildingName +
+            " | Madeira -" + buildingData.WoodCost +
+            " | Pedra -" + buildingData.StoneCost +
+            " | Comida -" + buildingData.FoodCost +
+            " | Ouro -" + buildingData.GoldCost
+        );
+
+
+        return true;
+    }
+
+
+    // =========================================================
     // INICIAR CONSTRUÇÃO
     // =========================================================
 
@@ -252,6 +365,26 @@ public class ConstructionManager : MonoBehaviour
                 "."
             );
 
+            return false;
+        }
+
+
+        // =====================================================
+        // VERIFICAR RECURSOS
+        // =====================================================
+
+        if (!CanAffordConstruction(buildingData))
+        {
+            return false;
+        }
+
+
+        // =====================================================
+        // PAGAR RECURSOS
+        // =====================================================
+
+        if (!PayConstructionCost(buildingData))
+        {
             return false;
         }
 
@@ -438,6 +571,156 @@ public class ConstructionManager : MonoBehaviour
 
 
     // =========================================================
+    // VERIFICAR RECURSOS DO UPGRADE
+    // =========================================================
+
+    private bool CanAffordUpgrade(
+        BuildingInstance building
+    )
+    {
+        if (building == null)
+            return false;
+
+
+        if (building.Data == null)
+            return false;
+
+
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogError(
+                "ConstructionManager: ResourceManager não encontrado."
+            );
+
+            return false;
+        }
+
+
+        int woodCost =
+            building.GetUpgradeWoodCost();
+
+        int stoneCost =
+            building.GetUpgradeStoneCost();
+
+        int foodCost =
+            building.GetUpgradeFoodCost();
+
+        int goldCost =
+            building.GetUpgradeGoldCost();
+
+
+        bool canAfford =
+            ResourceManager.Instance.CanAfford(
+                woodCost,
+                stoneCost,
+                foodCost,
+                goldCost
+            );
+
+
+        if (!canAfford)
+        {
+            Debug.Log(
+                "Recursos insuficientes para upgrade: " +
+                building.Data.BuildingName +
+                " | LVL " +
+                building.Level +
+                " → " +
+                building.GetNextLevel() +
+                " | Necessário: " +
+                "Madeira " + woodCost +
+                " | Pedra " + stoneCost +
+                " | Comida " + foodCost +
+                " | Ouro " + goldCost +
+                " | Atual: " +
+                "Madeira " + ResourceManager.Instance.Wood +
+                " | Pedra " + ResourceManager.Instance.Stone +
+                " | Comida " + ResourceManager.Instance.Food +
+                " | Ouro " + ResourceManager.Instance.Gold
+            );
+
+            return false;
+        }
+
+
+        return true;
+    }
+
+
+    // =========================================================
+    // PAGAR UPGRADE
+    // =========================================================
+
+    private bool PayUpgradeCost(
+        BuildingInstance building
+    )
+    {
+        if (building == null)
+            return false;
+
+
+        if (ResourceManager.Instance == null)
+        {
+            Debug.LogError(
+                "ConstructionManager: ResourceManager não encontrado."
+            );
+
+            return false;
+        }
+
+
+        int woodCost =
+            building.GetUpgradeWoodCost();
+
+        int stoneCost =
+            building.GetUpgradeStoneCost();
+
+        int foodCost =
+            building.GetUpgradeFoodCost();
+
+        int goldCost =
+            building.GetUpgradeGoldCost();
+
+
+        bool paid =
+            ResourceManager.Instance.TrySpend(
+                woodCost,
+                stoneCost,
+                foodCost,
+                goldCost
+            );
+
+
+        if (!paid)
+        {
+            Debug.LogWarning(
+                "ConstructionManager: não foi possível pagar " +
+                "os recursos do upgrade."
+            );
+
+            return false;
+        }
+
+
+        Debug.Log(
+            "Recursos consumidos para upgrade: " +
+            building.Data.BuildingName +
+            " | LVL " +
+            building.Level +
+            " → " +
+            building.GetNextLevel() +
+            " | Madeira -" + woodCost +
+            " | Pedra -" + stoneCost +
+            " | Comida -" + foodCost +
+            " | Ouro -" + goldCost
+        );
+
+
+        return true;
+    }
+
+
+    // =========================================================
     // INICIAR UPGRADE
     // =========================================================
 
@@ -486,6 +769,30 @@ public class ConstructionManager : MonoBehaviour
             return false;
         }
 
+
+        // =====================================================
+        // VERIFICAR RECURSOS
+        // =====================================================
+
+        if (!CanAffordUpgrade(building))
+        {
+            return false;
+        }
+
+
+        // =====================================================
+        // PAGAR RECURSOS
+        // =====================================================
+
+        if (!PayUpgradeCost(building))
+        {
+            return false;
+        }
+
+
+        // =====================================================
+        // TEMPO
+        // =====================================================
 
         constructionDuration =
             Mathf.Max(
